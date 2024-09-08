@@ -29,8 +29,8 @@ function BlueMarker({ left, top, uuid, text }) {
           target.setAttribute("data-x", x);
           target.setAttribute("data-y", y);
 
+          
           selectedHotSpot.updateblueMarkerPosition(x + left, y + top);
-
           const parentRect = parentElement.getBoundingClientRect();
           const rect = target.getBoundingClientRect();
           const centerX = rect.left - parentRect.left + blueCircleElement.offsetWidth / 2;
