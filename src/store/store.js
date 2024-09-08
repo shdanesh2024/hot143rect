@@ -5,15 +5,7 @@ const useImageStore = create((set) => ({
   setImageSrc: (src) => set({ imageSrc: src }),
 }));
 
-// const useMarkersStore = create((set) => ({
-//   selectedMarker: null,
-//   setSelectedMarker: (uuid) => set({ selectedMarker: uuid }),
-//   markers: [],
-//   addMarker: (uuid) =>
-//     set((state) => ({ markers: [...state.markers, { uuid }] })),
-//   removeMarker: (uuid) =>
-//     set((state) => ({ markers: state.markers.filter((m) => m.uuid !== uuid) })),
-// }));
+
 const useHotSpotStore = create((set) => ({
   selectedHotSpot: null,
   setSelectedHotSpot: (uuid) =>
