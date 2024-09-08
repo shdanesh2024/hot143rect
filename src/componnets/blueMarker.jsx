@@ -38,7 +38,7 @@ function BlueMarker({ left, top, uuid, text }) {
           const centerY = rect.top - parentRect.top + blueCircleElement.offsetHeight / 2;
 
           selectedHotSpot.updateBlueMarkerCenter(centerX, centerY);
-          // selectedHotSpot.updateLabelPosition(x + left, y + top);
+   
         },
       },
     });

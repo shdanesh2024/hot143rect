@@ -23,16 +23,20 @@ export class HotSpot {
   updateLabelPosition(x, y) {
     this.label.x = x;
     this.label.y = y;
-    this.label.centerX = x + this.label.w / 2;
-    this.label.centerY = y + this.label.h / 2;
+    // this.label.centerX = x + this.label.w / 2;
+    // this.label.centerY = y + this.label.h / 2;
     this.notifyObservers();
   }
-
+  updateLabelCenter(centerX, centerY){
+    this.label.centerX = centerX;
+    this.label.centerY = centerY;
+    this.notifyObservers();
+  }
   updateLabelText_W_H(text, w, h) {
     this.label.text = text;
     this.label.w = w;
     this.label.h = h;
-    this.updateLabelPosition(this.label.x, this.label.y);
+    this.updateLabelCenter(this.label.x + this.label.w / 2, this.label.y + this.label.h / 2);
   }
 
 

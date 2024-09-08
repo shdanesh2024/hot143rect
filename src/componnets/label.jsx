@@ -32,6 +32,9 @@ function Label({ left, top, hotSpot }) {
           target.setAttribute("data-y", y);
 
           setSelectedHotSpot(uuid);
+          const centerX = x + left + target.offsetWidth / 2
+          const centerY = y + top + target.offsetHeight / 2
+          selectedHotSpot.updateLabelCenter(centerX, centerY);
           selectedHotSpot.updateLabelPosition(x + left, y + top);
         },
       },
