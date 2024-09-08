@@ -1,0 +1,24 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+ 
+  .blueCircle {
+    @apply bg-[#0096e0] shadow-[0px_2px_8px_rgba(86,99,129,0.5)] border border-solid border-white rounded-full absolute top-0 left-0 w-6 h-6 flex items-center transition transform duration-100 ease-out hover:opacity-100 hover:cursor-pointer  hover:scale-110 active:scale-100  select-none;
+  }
+
+  .blueDot {
+    @apply block w-2 h-2 p-0 m-auto text-2xl leading-4 text-center text-white bg-white rounded-full select-none;
+    @apply transition-opacity duration-200 ease-in; /* Transition for opacity */
+    @apply transition-transform duration-100 ease-out; /* Transition for transform */
+    @apply transition duration-200 ease-in; /* Transition for background */
+  }
+
+  .blueRing {
+    @apply block absolute size-7 top-[-2px] left-[-2px]  rounded-full border-solid border-[#0096e0] border-2 origin-center opacity-0  select-none
+
+  }
+
+}
