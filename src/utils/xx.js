@@ -1,8 +1,8 @@
 export class HotSpot {
-  constructor(labelText, descriptionText, uuid) {
+  constructor(labelText, width, height, descriptionText, uuid) {
     this.uuid = uuid;
     this.marker = { x: 0, y: 0 };
-    this.label = { x: 0, y: 0, text: labelText, centerX: 0, centerY: 0, w: 0, h: 0 };
+    this.label = { x: 0, y: 0, text: labelText, centerX: 0, centerY: 0, w: width, h: height };
     this.blueMarker = { x: 0, y: 0, centerX: 0, centerY: 0 };
     this.description = { position: 'top-right', text: descriptionText, x: 0, y: 0 };
     this.observers = [];
@@ -23,8 +23,6 @@ export class HotSpot {
   updateLabelPosition(x, y) {
     this.label.x = x;
     this.label.y = y;
-    // this.label.centerX = x + this.label.w / 2;
-    // this.label.centerY = y + this.label.h / 2;
     this.notifyObservers();
   }
   updateLabelCenter(centerX, centerY){
