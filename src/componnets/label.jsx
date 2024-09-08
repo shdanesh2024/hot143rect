@@ -69,7 +69,7 @@ function Label({ left, top, hotSpot }) {
     <div
       onClick={handleClick}
       id={`label-${uuid}`}
-      className="absolute top-0 p-2 opacity-50 text-white bg-orange-600 shadow-md select-none draggable"
+      className="absolute top-0 p-2 opacity-90 text-white bg-orange-600 shadow-md select-none draggable"
       style={{ top: `${top}px`, left: `${left}px` }}
     >
       <p>{text}</p>

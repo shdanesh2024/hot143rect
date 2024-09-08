@@ -1,13 +1,59 @@
 import { useState, useEffect, useCallback } from "react";
 import { Line as KonvaLine } from "react-konva";
 
+// Helper functions to calculate middle points based on different conditions
+const calculateMiddlePointRightAbove = (label, padding) => ({
+  x: label.centerX + label.w / 2 + padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointRightAligned = (label, padding) => ({
+  x: label.centerX + label.w / 2 + padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointRightBelow = (label, padding) => ({
+  x: label.centerX + label.w / 2 + padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointDirectlyBelow = (label, padding) => ({
+  x: label.centerX,
+  y: label.centerY + label.h / 2 + padding,
+});
+
+const calculateMiddlePointLeftBelow = (label, padding) => ({
+  x: label.centerX - label.w / 2 - padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointLeftAligned = (label, padding) => ({
+  x: label.centerX - label.w / 2 - padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointLeftAbove = (label, padding) => ({
+  x: label.centerX - label.w / 2 - padding,
+  y: label.centerY,
+});
+
+const calculateMiddlePointDirectlyAbove = (label, padding) => ({
+  x: label.centerX,
+  y: label.centerY - label.h / 2 - padding,
+});
+
+const calculateMidPoint = (blueMarker, label) => ({
+  x: (blueMarker.centerX + label.centerX) / 2,
+  y: (blueMarker.centerY + label.centerY) / 2,
+});
+
 function Line({ hotSpot }) {
   const [endPoint, setEndPoint] = useState({ x: 0, y: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [middlePoint, setMiddlePoint] = useState({ x: 0, y: 0 });
-  
-  const label = hotSpot.label;
-  const blueMarker = hotSpot.blueMarker;
+
+  const { label, blueMarker } = hotSpot;
+  const padding = 30;
 
   const handleUpdate = useCallback(() => {
     const newEndPoint = { x: label.centerX, y: label.centerY };
@@ -16,64 +62,45 @@ function Line({ hotSpot }) {
     setEndPoint(newEndPoint);
     setStartPoint(newStartPoint);
 
-    // Determine the middle point based on the conditions
     let newMiddlePoint = { x: 0, y: 0 };
-    const padding = 20;
+
+    const xDiff = Math.abs(blueMarker.centerX - label.centerX);
 
     if (blueMarker.centerX > label.centerX + label.w / 2 + padding && blueMarker.centerY < label.centerY + label.h / 2) {
-      // Condition 1: BlueMarker to the right and above the label
-      newMiddlePoint = {
-        x: label.centerX + label.w / 2 + padding,
-        y: label.centerY 
-      };
+      newMiddlePoint = calculateMiddlePointRightAbove(label, padding);
     } else if (blueMarker.centerX > label.centerX + label.w / 2 + padding && blueMarker.centerY <= label.centerY) {
-      // Condition 2: BlueMarker to the right, vertically aligned or above the label
-      newMiddlePoint = {
-        x: label.centerX + label.w / 2 + padding,
-        y: label.centerY,
-      };
+      newMiddlePoint = calculateMiddlePointRightAligned(label, padding);
     } else if (blueMarker.centerX > label.centerX + label.w / 2 + padding && blueMarker.centerY > label.centerY) {
-      // Condition 3: BlueMarker to the right and below the label
-      newMiddlePoint = {
-        x: label.centerX + label.w / 2 + padding,
-        y: label.centerY
-      };
+      newMiddlePoint = calculateMiddlePointRightBelow(label, padding);
     } else if (blueMarker.centerX === label.centerX && blueMarker.centerY > label.centerY + label.h / 2 + padding) {
-      // Condition 4: BlueMarker directly below the label
-      newMiddlePoint = {
-        x: label.centerX,
-        y: label.centerY + label.h / 2 + padding,
-      };
+      newMiddlePoint = calculateMiddlePointDirectlyBelow(label, padding);
     } else if (blueMarker.centerX < label.centerX - label.w / 2 - padding && blueMarker.centerY > label.centerY) {
-      // Condition 5: BlueMarker to the left and below the label
-      newMiddlePoint = {
-        x: label.centerX - label.w / 2 - padding,
-        y: label.centerY 
-      };
+      newMiddlePoint = calculateMiddlePointLeftBelow(label, padding);
     } else if (blueMarker.centerX < label.centerX - label.w / 2 - padding && blueMarker.centerY === label.centerY) {
-      // Condition 6: BlueMarker to the left, vertically aligned
-      newMiddlePoint = {
-        x: label.centerX - label.w / 2 - padding,
-        y: label.centerY,
-      };
+      newMiddlePoint = calculateMiddlePointLeftAligned(label, padding);
     } else if (blueMarker.centerX < label.centerX - label.w / 2 - padding && blueMarker.centerY < label.centerY) {
-      // Condition 7: BlueMarker to the left and above the label
-      newMiddlePoint = {
-        x: label.centerX - label.w / 2 - padding,
-        y: label.centerY 
-      };
+      newMiddlePoint = calculateMiddlePointLeftAbove(label, padding);
     } else if (blueMarker.centerX === label.centerX && blueMarker.centerY < label.centerY - label.h / 2 - padding) {
-      // Condition 8: BlueMarker directly above the label
-      newMiddlePoint = {
-        x: label.centerX,
-        y: label.centerY - label.h / 2 - padding,
-      };
+      newMiddlePoint = calculateMiddlePointDirectlyAbove(label, padding);
     } else {
-      // Default case: if no conditions match, set middle point as the midpoint between start and end points
-      newMiddlePoint = {
-        x: (blueMarker.centerX + label.centerX) / 2,
-        y: (blueMarker.centerY + label.centerY) / 2,
-      };
+      if (xDiff <= padding) {
+        newMiddlePoint = calculateMidPoint(blueMarker, label);
+      } else if (xDiff < 50) {
+        newMiddlePoint = {
+          x: label.centerX,
+          y: blueMarker.centerY,
+        };
+      } else if (blueMarker.centerY > label.centerY) {
+        newMiddlePoint = {
+          x: label.centerX,
+          y: label.centerY + padding,
+        };
+      } else {
+        newMiddlePoint = {
+          x: label.centerX,
+          y: label.centerY - padding,
+        };
+      }
     }
 
     setMiddlePoint(newMiddlePoint);
