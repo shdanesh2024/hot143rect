@@ -21,6 +21,7 @@ function BlueMarker({ left, top, uuid, text }) {
       autoScroll: true,
       listeners: {
         move: (event) => {
+      
           const target = event.target;
           const x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
           const y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
@@ -37,7 +38,7 @@ function BlueMarker({ left, top, uuid, text }) {
           const centerY = rect.top - parentRect.top + blueCircleElement.offsetHeight / 2;
 
           selectedHotSpot.updateBlueMarkerCenter(centerX, centerY);
-          selectedHotSpot.updateLabelPosition(x + left, y + top);
+          // selectedHotSpot.updateLabelPosition(x + left, y + top);
         },
       },
     });
