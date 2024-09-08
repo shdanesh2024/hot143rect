@@ -14,7 +14,7 @@ const Input = ({ value, placeholder, className }) => {
       const width = labelElement.offsetWidth;
       const height = labelElement.offsetHeight;
 
-      console.log(`Label width: ${width}px, Label height: ${height}px`);
+      // console.log(`Label width: ${width}px, Label height: ${height}px`);
     }
   };
 

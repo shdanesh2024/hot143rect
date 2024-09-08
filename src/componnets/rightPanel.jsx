@@ -32,7 +32,7 @@ function RightPanel() {
       const height = labelElement.offsetHeight;
       setLabelWidth(width);  // Update label width in store
       setLabelHeight(height);  // Update label height in store
-      console.log(`Label dimensions - Width: ${width}, Height: ${height}`);
+      // console.log(`Label dimensions - Width: ${width}, Height: ${height}`);
     }
   }, [labelInputTxt, setLabelWidth, setLabelHeight]); // Trigger on label text change
 
