@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useHotSpotStore } from "../store/store";
 
 const Input = ({ value, placeholder, className }) => {
-  const { labelInputTxt, setLabelInputTxt } = useHotSpotStore(); // Destructure the function from the store
+  const { setLabelInputTxt, setLabelWidth, setLabelHeight, labelInputTxt } = useHotSpotStore();
+  const labelRef = useRef(null); // Ref to track the label dimensions
 
+  // Handle input change
   const handleChange = (e) => {
-    const newValue = e.target.value;
-    setLabelInputTxt(newValue); // Update the label input text in the store
+    setLabelInputTxt(e.target.value); // Update the store with the new input text
+  };
 
-    // Get the width and height of the div with id="label" whenever the input changes
-    const labelElement = document.getElementById("label");
+  // Update label dimensions whenever the label text changes
+  useEffect(() => {
+    const labelElement = labelRef.current;
     if (labelElement) {
       const width = labelElement.offsetWidth;
       const height = labelElement.offsetHeight;
-
-      // console.log(`Label width: ${width}px, Label height: ${height}px`);
+      setLabelWidth(width); // Update label width in the store
+      setLabelHeight(height); // Update label height in the store
     }
-  };
+  }, [labelInputTxt, setLabelWidth, setLabelHeight]); // Re-run whenever label text changes
 
   return (
     <div className="flex w-full px-4">
@@ -27,7 +30,13 @@ const Input = ({ value, placeholder, className }) => {
         onChange={handleChange}
         placeholder={placeholder}
       />
-     
+      <div
+        id="label"
+        ref={labelRef}
+        className="absolute top-0 p-2 text-white bg-orange-600 shadow-md select-none draggable"
+      >
+        <p>{labelInputTxt}</p>
+      </div>
     </div>
   );
 };
