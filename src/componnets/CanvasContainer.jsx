@@ -11,6 +11,7 @@ function CanvasContainer({ imageSize }) {
 
   return (
     <div className="absolute top-0 w-full h-full canvasContainer">
+     
       <Stage width={imageSize.width} height={imageSize.height}>
         <Layer>
           <Rect width={imageSize.width} height={imageSize.height} />
