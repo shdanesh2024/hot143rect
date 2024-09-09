@@ -3,7 +3,10 @@ import { useEffect, useState, useCallback } from "react";
 import { useHotSpotStore } from "../store/store";
 
 // Custom hook for draggable logic
-const useDraggableLabel = (uuid, left, top, setSelectedHotSpot, selectedHotSpot) => {
+const useDraggableLabel = (uuid, left, top) => {
+  const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
+  const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
+
   useEffect(() => {
     const draggableElement = document.getElementById(`label-${uuid}`);
 
@@ -18,12 +21,13 @@ const useDraggableLabel = (uuid, left, top, setSelectedHotSpot, selectedHotSpot)
       target.setAttribute("data-x", x);
       target.setAttribute("data-y", y);
 
-      setSelectedHotSpot(uuid);
-      const centerX = x + left + target.offsetWidth / 2;
-      const centerY = y + top + target.offsetHeight / 2;
+      if (selectedHotSpot && selectedHotSpot.uuid === uuid) {
+        const centerX = x + left + target.offsetWidth / 2;
+        const centerY = y + top + target.offsetHeight / 2;
 
-      selectedHotSpot.updateLabelCenter(centerX, centerY);
-      selectedHotSpot.updateLabelPosition(x + left, y + top);
+        selectedHotSpot.updateLabelCenter(centerX, centerY);
+        selectedHotSpot.updateLabelPosition(x + left, y + top);
+      }
     };
 
     const interactInstance = interact(draggableElement).draggable({
@@ -33,15 +37,22 @@ const useDraggableLabel = (uuid, left, top, setSelectedHotSpot, selectedHotSpot)
         }),
       ],
       autoScroll: true,
-      listeners: { move: onMove },
+      listeners: {
+        start: () => {
+          setSelectedHotSpot(uuid); // Set selected hotspot on drag start
+        },
+        move: onMove,
+      },
     });
 
     return () => interactInstance.unset();
-  }, [uuid, left, top, setSelectedHotSpot, selectedHotSpot]);
+  }, [uuid, left, top, selectedHotSpot, setSelectedHotSpot]);
 };
 
 // Custom hook for HotSpot observer
-const useHotSpotObserver = (hotSpot, setText, selectedHotSpot) => {
+const useHotSpotObserver = (hotSpot, setText) => {
+  const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
+
   useEffect(() => {
     const observer = {
       update: (updatedHotSpot) => {
@@ -51,10 +62,14 @@ const useHotSpotObserver = (hotSpot, setText, selectedHotSpot) => {
       },
     };
 
-    selectedHotSpot.addObserver(observer);
+    if (selectedHotSpot) {
+      selectedHotSpot.addObserver(observer);
+    }
 
     return () => {
-      selectedHotSpot.removeObserver(observer);
+      if (selectedHotSpot) {
+        selectedHotSpot.removeObserver(observer);
+      }
     };
   }, [hotSpot, setText, selectedHotSpot]);
 };
@@ -62,18 +77,16 @@ const useHotSpotObserver = (hotSpot, setText, selectedHotSpot) => {
 function Label({ left, top, hotSpot }) {
   const uuid = hotSpot.uuid;
   const [text, setText] = useState(hotSpot.label.text);
-
   const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
-  const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
 
   // Use custom hook for draggable functionality
-  useDraggableLabel(uuid, left, top, setSelectedHotSpot, selectedHotSpot);
+  useDraggableLabel(uuid, left, top);
 
   // Use custom hook for HotSpot observer
-  useHotSpotObserver(hotSpot, setText, selectedHotSpot);
+  useHotSpotObserver(hotSpot, setText);
 
   const handleClick = useCallback(() => {
-    setSelectedHotSpot(uuid);
+    setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
   }, [setSelectedHotSpot, uuid]);
 
   return (

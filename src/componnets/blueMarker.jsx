@@ -3,11 +3,14 @@ import { useEffect, useState, useCallback } from "react";
 import { useHotSpotStore } from "../store/store";
 
 // Custom hook for draggable logic
-const useDraggable = (uuid, left, top, selectedHotSpot) => {
+const useDraggable = (uuid, left, top) => {
+  const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
+  const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
+
   useEffect(() => {
     const draggableElement = document.getElementById(`blue-${uuid}`);
-    const parentElement = draggableElement.parentElement;
-    const blueCircleElement = draggableElement.querySelector(".blueCircle");
+    const parentElement = draggableElement?.parentElement;
+    const blueCircleElement = draggableElement?.querySelector(".blueCircle");
 
     if (!draggableElement || !parentElement || !blueCircleElement) return;
 
@@ -20,14 +23,16 @@ const useDraggable = (uuid, left, top, selectedHotSpot) => {
       target.setAttribute("data-x", x);
       target.setAttribute("data-y", y);
 
-      selectedHotSpot.updateblueMarkerPosition(x + left, y + top);
+      if (selectedHotSpot && selectedHotSpot.uuid === uuid) {
+        selectedHotSpot.updateblueMarkerPosition(x + left, y + top);
 
-      const parentRect = parentElement.getBoundingClientRect();
-      const rect = target.getBoundingClientRect();
-      const centerX = rect.left - parentRect.left + blueCircleElement.offsetWidth / 2;
-      const centerY = rect.top - parentRect.top + blueCircleElement.offsetHeight / 2;
+        const parentRect = parentElement.getBoundingClientRect();
+        const rect = target.getBoundingClientRect();
+        const centerX = rect.left - parentRect.left + blueCircleElement.offsetWidth / 2;
+        const centerY = rect.top - parentRect.top + blueCircleElement.offsetHeight / 2;
 
-      selectedHotSpot.updateBlueMarkerCenter(centerX, centerY);
+        selectedHotSpot.updateBlueMarkerCenter(centerX, centerY);
+      }
     };
 
     const interactInstance = interact(draggableElement).draggable({
@@ -37,27 +42,30 @@ const useDraggable = (uuid, left, top, selectedHotSpot) => {
         }),
       ],
       autoScroll: true,
-      listeners: { move: onMove },
+      listeners: {
+        start: () => {
+          setSelectedHotSpot(uuid);
+        },
+        move: onMove,
+      },
     });
 
     return () => interactInstance.unset();
-  }, [uuid, left, top, selectedHotSpot]);
+  }, [uuid, left, top, selectedHotSpot, setSelectedHotSpot]);
 };
 
-function BlueMarker({ left, top, uuid, text }) {
-  const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
-  const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
+function BlueMarker({ left, top, uuid }) {
   const [isHovered, setIsHovered] = useState(false);
+  const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
 
   // Use custom hook for draggable functionality
-  useDraggable(uuid, left, top, selectedHotSpot);
+  useDraggable(uuid, left, top);
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
   const handleClick = useCallback(() => {
-    setSelectedHotSpot(uuid);
-    console.log(selectedHotSpot);
-  }, [setSelectedHotSpot, uuid, selectedHotSpot]);
+    setSelectedHotSpot(uuid); // Ensure proper selection on click
+  }, [setSelectedHotSpot, uuid]);
 
   return (
     <div

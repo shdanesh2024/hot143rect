@@ -19,7 +19,7 @@ function RightPanel() {
     const uuid = uuidv4();
     const hotSpot = new HotSpot(labelInputTxt, labelWidth, labelHeight, "description", uuid);
     AddHotSpot(hotSpot);
-    setSelectedHotSpot(uuid);
+    setSelectedHotSpot(uuid); // Set the newly added hotspot as selected
   };
 
   return (

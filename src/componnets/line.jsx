@@ -48,6 +48,7 @@ const calculateMidPoint = (blueMarker, label) => ({
 });
 
 function Line({ hotSpot }) {
+
   const [endPoint, setEndPoint] = useState({ x: 0, y: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [middlePoint, setMiddlePoint] = useState({ x: 0, y: 0 });
