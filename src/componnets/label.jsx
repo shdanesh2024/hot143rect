@@ -88,6 +88,24 @@ function Label({ left, top, hotSpot }) {
   const handleClick = useCallback(() => {
     setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
     console.log("Selected hotspot:", hotSpot);
+    const currntDescriptionPositon = hotSpot.description.position;
+    let newDescriptionPositon
+
+    switch (currntDescriptionPositon) {
+      case "bottom-right":
+        newDescriptionPositon = "bottom-left";
+        break;
+      case "bottom-left":
+        newDescriptionPositon = "top-left";
+        break;
+      case "top-left":
+        newDescriptionPositon = "top-right";
+        break;
+      case "top-right":
+        newDescriptionPositon = "bottom-right";
+        break;
+    }
+    hotSpot.updateDescriptionPosition(newDescriptionPositon);
   }, [setSelectedHotSpot, uuid]);
 
   return (

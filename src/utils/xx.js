@@ -43,11 +43,11 @@ export class HotSpot {
 
 
 
-  updateDescriptionPosition(x, y) {
-    this.description.x = x;
-    this.description.y = y;
-    this.notifyObservers();
-  }
+  // updateDescriptionPosition(x, y) {
+  //   this.description.x = x;
+  //   this.description.y = y;
+  //   this.notifyObservers();
+  // }
 updateDescriptionWH(w, h) { 
   this.description.width = w;
   this.description.height = h;
