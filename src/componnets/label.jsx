@@ -6,6 +6,7 @@ import { useHotSpotStore } from "../store/store";
 const useDraggableLabel = (uuid, left, top) => {
   const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
   const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
+  
 
   useEffect(() => {
     const draggableElement = document.getElementById(`label-${uuid}`);
@@ -85,27 +86,30 @@ function Label({ left, top, hotSpot }) {
   // Use custom hook for HotSpot observer
   useHotSpotObserver(hotSpot, setText);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((event) => {
     setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
     console.log("Selected hotspot:", hotSpot);
-    const currntDescriptionPositon = hotSpot.description.position;
-    let newDescriptionPositon
-
-    switch (currntDescriptionPositon) {
-      case "bottom-right":
-        newDescriptionPositon = "bottom-left";
-        break;
-      case "bottom-left":
-        newDescriptionPositon = "top-left";
-        break;
-      case "top-left":
-        newDescriptionPositon = "top-right";
-        break;
-      case "top-right":
-        newDescriptionPositon = "bottom-right";
-        break;
+    if(event.ctrlKey){
+      const currntDescriptionPositon = hotSpot.description.position;
+      let newDescriptionPositon
+  
+      switch (currntDescriptionPositon) {
+        case "bottom-right":
+          newDescriptionPositon = "bottom-left";
+          break;
+        case "bottom-left":
+          newDescriptionPositon = "top-left";
+          break;
+        case "top-left":
+          newDescriptionPositon = "top-right";
+          break;
+        case "top-right":
+          newDescriptionPositon = "bottom-right";
+          break;
+      }
+      hotSpot.updateDescriptionPosition(newDescriptionPositon);
     }
-    hotSpot.updateDescriptionPosition(newDescriptionPositon);
+
   }, [setSelectedHotSpot, uuid]);
 
   return (
