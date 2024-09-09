@@ -1,9 +1,9 @@
 import React from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import { useHotSpotStore } from "../store/store";
-import Line from "./Line";
-import Label from "./Label";
-import BlueMarker from "./BlueMarker";
+import Line from "./line";
+import Label from "./label";
+import BlueMarker from "./blueMarker";
 
 function CanvasContainer({ imageSize }) {
   const hotSpots = useHotSpotStore((state) => state.hotSpots);
