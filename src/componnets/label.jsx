@@ -87,6 +87,7 @@ function Label({ left, top, hotSpot }) {
 
   const handleClick = useCallback(() => {
     setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
+    console.log("Selected hotspot:", hotSpot);
   }, [setSelectedHotSpot, uuid]);
 
   return (

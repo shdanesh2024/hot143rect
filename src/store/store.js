@@ -1,14 +1,17 @@
 import { create } from "zustand";
 
+// Image store for managing image-related state
 const useImageStore = create((set) => ({
   imageSrc: "/flower.webp",
   setImageSrc: (src) => set({ imageSrc: src }),
 }));
 
+// HotSpot store for managing hotspots, labels, descriptions, etc.
 const useHotSpotStore = create((set) => ({
   selectedHotSpot: null,
   hotSpots: [],
   labelInputTxt: null,
+  descriptionText: null, // New state for description text
   labelWidth: 0,
   labelHeight: 0,
 
@@ -20,6 +23,9 @@ const useHotSpotStore = create((set) => ({
 
   // Actions for label input text
   setLabelInputTxt: (text) => set({ labelInputTxt: text }),
+
+  // Actions for description text
+  setDescriptionText: (text) => set({ descriptionText: text }),
 
   // Actions for label dimensions
   setLabelWidth: (width) => set({ labelWidth: width }),

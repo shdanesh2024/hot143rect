@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useHotSpotStore } from "../store/store";
 import { HotSpot } from "../utils/xx";
-import Input from "./input";
+import TextInput from "./TextInput";
 import TabButton from "./TabButton";
 import AddHotspotButton from "./AddHotspotButton";
 import EditInput from "./EditInput";
@@ -11,13 +11,14 @@ function RightPanel() {
   const [activeTab, setActiveTab] = useState("tab1");
   const AddHotSpot = useHotSpotStore((state) => state.addHotSpot);
   const labelInputTxt = useHotSpotStore((state) => state.labelInputTxt);
+  const descriptionText = useHotSpotStore((state) => state.descriptionText); // Added descriptionText
   const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
   const labelWidth = useHotSpotStore((state) => state.labelWidth);
   const labelHeight = useHotSpotStore((state) => state.labelHeight);
 
   const handleAddHotSpot = () => {
     const uuid = uuidv4();
-    const hotSpot = new HotSpot(labelInputTxt, labelWidth, labelHeight, "description", uuid);
+    const hotSpot = new HotSpot(labelInputTxt, labelWidth, labelHeight, descriptionText, uuid); // Pass descriptionText
     AddHotSpot(hotSpot);
     setSelectedHotSpot(uuid); // Set the newly added hotspot as selected
   };
@@ -38,7 +39,10 @@ function RightPanel() {
       </div>
       <div className={activeTab === "tab1" ? "block" : "hidden"}>
         <AddHotspotButton onClick={handleAddHotSpot} />
-        <Input placeholder="Enter something..." />
+        
+        {/* Text inputs for label and description */}
+        <TextInput type="label" value={labelInputTxt} placeholder="Enter label text" />
+        <TextInput type="description" value={descriptionText} placeholder="Enter description" /> {/* Updated to use descriptionText */}
       </div>
       <div className={activeTab === "tab2" ? "block" : "hidden"}>
         <EditInput />
