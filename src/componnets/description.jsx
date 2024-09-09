@@ -3,19 +3,19 @@ import interact from "interactjs";
 
 function Description({ hotSpot }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [width, setWidth] = useState(200); // Initial width
-  const [height, setHeight] = useState(0); // Initial height will be set after render
+  const [width, setWidth] = useState(200); 
+  const [height, setHeight] = useState(0); 
 
   const descriptionRef = useRef(null);
 
   const updatePosition = useCallback(() => {
     // Find the Label element by ID
     const labelElement = document.getElementById(`label-${hotSpot.uuid}`);
-    const canvasContainer = document.querySelector('.canvasContainer'); // Parent container
+    const canvasContainer = document.querySelector('.canvasContainer'); 
 
     if (labelElement && canvasContainer) {
-      const labelRect = labelElement.getBoundingClientRect(); // Get label dimensions and position
-      const containerRect = canvasContainer.getBoundingClientRect(); // Get canvas container position
+      const labelRect = labelElement.getBoundingClientRect(); 
+      const containerRect = canvasContainer.getBoundingClientRect(); 
 
       let x = 0;
       let y = 0;
@@ -24,23 +24,23 @@ function Description({ hotSpot }) {
       switch (hotSpot.description.position) {
         case 'top-right':
           x = labelRect.right;
-          y = labelRect.top - containerRect.top; // Position the description above the label
+          y = labelRect.top - containerRect.top; 
           break;
         case 'top-left':
-          x = labelRect.left - width; // Position the description to the left of the label
-          y = labelRect.top - containerRect.top; // Position the description above the label
+          x = labelRect.left - width; 
+          y = labelRect.top - containerRect.top; 
           break;
         case 'bottom-right':
           x = labelRect.right;
-          y = labelRect.bottom - containerRect.top - height; // Use actual height here
+          y = labelRect.bottom - containerRect.top - height; 
           break;
         case 'bottom-left':
-          x = labelRect.left - width; // Position the description to the left of the label
-          y = labelRect.bottom - containerRect.top - height; // Use actual height here
+          x = labelRect.left - width; 
+          y = labelRect.bottom - containerRect.top - height; 
           break;
         default:
           x = labelRect.right;
-          y = labelRect.top - containerRect.top; // Default to top-right if no position is specified
+          y = labelRect.top - containerRect.top; 
       }
 
       setPosition({ x, y });
@@ -54,7 +54,7 @@ function Description({ hotSpot }) {
     if (element) {
       const { width: initialWidth, height: initialHeight } = element.getBoundingClientRect();
       setWidth(initialWidth);
-      setHeight(initialHeight); // Set initial height based on the rendered content
+      setHeight(initialHeight); 
 
       // Update the hotspot description with the initial width and height
       hotSpot.updateDescriptionWH(initialWidth, initialHeight);
@@ -77,31 +77,32 @@ function Description({ hotSpot }) {
 
     // Initialize interact.js for resizing the width only
     interact(element).resizable({
-      edges: { left: false, right: true, bottom: false, top: false }, // Only allow resizing from the right edge
+      edges: { left: false, right: true, bottom: false, top: false }, 
       listeners: {
         move(event) {
           let { width: newWidth } = event.rect;
 
           // Optionally, set minimum and maximum width
-          if (newWidth < 150) newWidth = 150; // Minimum width
-          if (newWidth > 600) newWidth = 600; // Maximum width
+          if (newWidth < 150) newWidth = 150; 
+          if (newWidth > 600) newWidth = 600;
 
           setWidth(newWidth);
+          setHeight(element.offsetHeight); // Update height after resizing
 
           // Update the hotspot description with the new width
-          hotSpot.updateDescriptionWH(newWidth, element.offsetHeight); // Update width and current height
+          hotSpot.updateDescriptionWH(newWidth, element.offsetHeight); 
         }
       }
     });
 
     return () => {
-      interact(element).unset(); // Clean up when the component unmounts
+      interact(element).unset(); 
     };
   }, [hotSpot]);
 
   const renderDescription = () => {
     const descriptionText = hotSpot.description.text;
-    const isHtml = /<\/?[a-z][\s\S]*>/i.test(descriptionText); // Simple check for HTML tags
+    const isHtml = /<\/?[a-z][\s\S]*>/i.test(descriptionText); 
 
     if (isHtml) {
       return <div dangerouslySetInnerHTML={{ __html: descriptionText }} />;
@@ -117,7 +118,7 @@ function Description({ hotSpot }) {
         top: `${position.y}px`,
         left: `${position.x}px`,
         width: `${width}px`,
-        height: 'auto', // Automatically adjust height to fit content
+        height: 'auto', 
         backgroundColor: 'white',
         position: 'absolute',
         overflow: 'auto',
