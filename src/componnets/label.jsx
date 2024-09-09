@@ -86,37 +86,63 @@ function Label({ left, top, hotSpot }) {
   // Use custom hook for HotSpot observer
   useHotSpotObserver(hotSpot, setText);
 
-  const handleClick = useCallback((event) => {
-    setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
-    console.log("Selected hotspot:", hotSpot);
-    if(event.ctrlKey){
-      const currntDescriptionPositon = hotSpot.description.position;
-      let newDescriptionPositon
-  
-      switch (currntDescriptionPositon) {
-        case "bottom-right":
-          newDescriptionPositon = "bottom-left";
-          break;
-        case "bottom-left":
-          newDescriptionPositon = "top-left";
-          break;
-        case "top-left":
-          newDescriptionPositon = "top-right";
-          break;
-        case "top-right":
-          newDescriptionPositon = "bottom-right";
-          break;
-      }
-      hotSpot.updateDescriptionPosition(newDescriptionPositon);
-    }
+const handleClick = useCallback((event) => {
+  setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
+  console.log("Selected hotspot:", hotSpot);
 
-  }, [setSelectedHotSpot, uuid]);
+  if (event.ctrlKey) {
+    const currntDescriptionPositon = hotSpot.description.position;
+    let newDescriptionPositon;
+
+    switch (currntDescriptionPositon) {
+      case "bottom-right":
+        newDescriptionPositon = "bottom-left";
+        break;
+      case "bottom-left":
+        newDescriptionPositon = "top-left";
+        break;
+      case "top-left":
+        newDescriptionPositon = "top-right";
+        break;
+      case "top-right":
+        newDescriptionPositon = "bottom-right";
+        break;
+    }
+    hotSpot.updateDescriptionPosition(newDescriptionPositon);
+  } else {
+    // Find all elements with the class 'description' and set their visibility to hidden
+    const descriptionElements = document.querySelectorAll('.description');
+
+
+    // Find the element with the id 'description-{uuid}' and toggle its visibility
+    const targetDescriptionElement = document.getElementById(`description-${uuid}`);
+    
+    if (targetDescriptionElement) {
+      const currentVisibility = targetDescriptionElement.style.visibility;
+      // Toggle visibility: If hidden, make visible; if visible, make hidden
+      if (currentVisibility !== 'hidden') {
+        descriptionElements.forEach((el) => {
+          el.style.visibility = 'hidden';
+        });
+      
+        
+      } else {
+        descriptionElements.forEach((el) => {
+          el.style.visibility = 'hidden';
+        });
+        targetDescriptionElement.style.visibility = 'visible';
+      }
+    }
+  }
+}, [setSelectedHotSpot, uuid, hotSpot]);
+
+  
 
   return (
     <div
       onClick={handleClick}
       id={`label-${uuid}`}
-      className="absolute top-0 p-2 opacity-90 text-white bg-orange-600 shadow-md select-none draggable"
+      className="absolute top-0 p-2 opacity-90 text-white bg-orange-600 shadow-md select-none draggable label"
       style={{ top: `${top}px`, left: `${left}px` }}
     >
       <p>{text}</p>

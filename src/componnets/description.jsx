@@ -119,7 +119,8 @@ function Description({ hotSpot }) {
 
   return (
     <div
-      ref={descriptionRef}
+    id={`description-${hotSpot.uuid}`} 
+         ref={descriptionRef}
       style={{
         top: `${position.y}px`,
         left: `${position.x}px`,
@@ -130,7 +131,7 @@ function Description({ hotSpot }) {
         overflow: 'auto',
         padding: isHtml ? '0' : '8px', 
       }}
-      className="text-black shadow-md select-none"
+      className="text-black shadow-md select-none description"
     >
       {renderDescription()}
     </div>
