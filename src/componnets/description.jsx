@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useLayoutEffect, useCallback, useRef } from "react";
 import interact from "interactjs";
 
 function Description({ hotSpot }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [width, setWidth] = useState(200); // Initial width
-  const [height, setHeight] = useState(); // Initial height
+  const [height, setHeight] = useState(0); // Initial height will be set after render
 
   const descriptionRef = useRef(null);
 
@@ -32,11 +32,11 @@ function Description({ hotSpot }) {
           break;
         case 'bottom-right':
           x = labelRect.right;
-          y = labelRect.bottom - containerRect.top; // Position the description below the label
+          y = labelRect.bottom - containerRect.top - height; // Use actual height here
           break;
         case 'bottom-left':
           x = labelRect.left - width; // Position the description to the left of the label
-          y = labelRect.bottom - containerRect.top; // Position the description below the label
+          y = labelRect.bottom - containerRect.top - height; // Use actual height here
           break;
         default:
           x = labelRect.right;
@@ -45,9 +45,23 @@ function Description({ hotSpot }) {
 
       setPosition({ x, y });
     }
-  }, [hotSpot.uuid, hotSpot.description.position, width]);
+  }, [hotSpot.uuid, hotSpot.description.position, width, height]);
 
-  useEffect(() => {
+  // Update the width and height after the component is mounted and first rendered
+  useLayoutEffect(() => {
+    const element = descriptionRef.current;
+
+    if (element) {
+      const { width: initialWidth, height: initialHeight } = element.getBoundingClientRect();
+      setWidth(initialWidth);
+      setHeight(initialHeight); // Set initial height based on the rendered content
+
+      // Update the hotspot description with the initial width and height
+      hotSpot.updateDescriptionWH(initialWidth, initialHeight);
+    }
+  }, [hotSpot]);
+
+  useLayoutEffect(() => {
     // Update position when component mounts or when hotSpot updates
     updatePosition();
     hotSpot.addObserver({ update: updatePosition });
@@ -56,7 +70,7 @@ function Description({ hotSpot }) {
     };
   }, [hotSpot, updatePosition]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = descriptionRef.current;
 
     if (!element) return;
@@ -67,17 +81,15 @@ function Description({ hotSpot }) {
       listeners: {
         move(event) {
           let { width: newWidth } = event.rect;
-          let { height: newHeight } = event.rect;
 
           // Optionally, set minimum and maximum width
           if (newWidth < 150) newWidth = 150; // Minimum width
           if (newWidth > 600) newWidth = 600; // Maximum width
 
           setWidth(newWidth);
-          setHeight(newHeight);
 
           // Update the hotspot description with the new width
-          hotSpot.updateDescriptionWH(newWidth, newHeight);
+          hotSpot.updateDescriptionWH(newWidth, element.offsetHeight); // Update width and current height
         }
       }
     });

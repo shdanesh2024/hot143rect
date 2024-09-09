@@ -4,7 +4,7 @@ export class HotSpot {
     this.marker = { x: 0, y: 0 };
     this.label = { x: 0, y: 0, text: labelText, centerX: 0, centerY: 0, w: width, h: height };
     this.blueMarker = { x: 0, y: 0, centerX: 0, centerY: 0 };
-    this.description = { position: 'top-left', text: descriptionText, x: 0, y: 0, width: 0, height: 0 };
+    this.description = { position: 'bottom-right', text: descriptionText, x: 0, y: 0, width: 0, height: 0 };
     this.observers = [];
   }
 
