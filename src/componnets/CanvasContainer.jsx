@@ -4,6 +4,7 @@ import { useHotSpotStore } from "../store/store";
 import Line from "./line";
 import Label from "./label";
 import BlueMarker from "./blueMarker";
+import Description from "./description";
 
 function CanvasContainer({ imageSize }) {
   const hotSpots = useHotSpotStore((state) => state.hotSpots);
@@ -39,6 +40,13 @@ function CanvasContainer({ imageSize }) {
           top={100}
           left={200}
           text={hotSpot.label.text}
+        />
+      ))}
+      {hotSpots.map((hotSpot) => (
+        <Description
+          key={hotSpot.uuid}
+   
+          hotSpot={hotSpot}
         />
       ))}
     </div>
