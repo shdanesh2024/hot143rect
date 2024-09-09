@@ -8,7 +8,10 @@ export class HotSpot {
     this.observers = [];
   }
 
-
+  updateDescriptionPosition(position) {
+    this.description.position = position; // Update the position string
+    this.notifyObservers(); // Notify observers of the change
+  }
   updateBlueMarkerCenter(centerX, centerY) {
     this.blueMarker.centerX = centerX;
     this.blueMarker.centerY = centerY;
