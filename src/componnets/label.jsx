@@ -6,7 +6,6 @@ import { useHotSpotStore } from "../store/store";
 const useDraggableLabel = (uuid, left, top) => {
   const setSelectedHotSpot = useHotSpotStore((state) => state.setSelectedHotSpot);
   const selectedHotSpot = useHotSpotStore((state) => state.selectedHotSpot);
-  
 
   useEffect(() => {
     const draggableElement = document.getElementById(`label-${uuid}`);
@@ -75,6 +74,38 @@ const useHotSpotObserver = (hotSpot, setText) => {
   }, [hotSpot, setText, selectedHotSpot]);
 };
 
+// Custom hook for resizable logic using interactjs
+const useResizableLabel = (uuid, hotSpot) => {
+  const setLabelWidth = useHotSpotStore((state) => state.setLabelWidth);
+  const setLabelHeight = useHotSpotStore((state) => state.setLabelHeight);
+
+  useEffect(() => {
+    const resizableElement = document.getElementById(`label-${uuid}`);
+
+    if (!resizableElement) return;
+
+    interact(resizableElement).resizable({
+      edges: { left: true, right: true, bottom: true, top: true },
+      listeners: {
+        move(event) {
+          const { width, height } = event.rect;
+          event.target.style.width = `${width}px`;
+          event.target.style.height = `${height}px`;
+
+          // Update the HotSpot label's dimensions
+          hotSpot.updateLabelText_W_H(hotSpot.label.text, width, height);
+
+          // Update the store with new dimensions
+          setLabelWidth(width);
+          setLabelHeight(height);
+        },
+      },
+    });
+
+    return () => interact(resizableElement).unset();
+  }, [uuid, hotSpot, setLabelWidth, setLabelHeight]);
+};
+
 function Label({ left, top, hotSpot }) {
   const uuid = hotSpot.uuid;
   const [text, setText] = useState(hotSpot.label.text);
@@ -86,64 +117,62 @@ function Label({ left, top, hotSpot }) {
   // Use custom hook for HotSpot observer
   useHotSpotObserver(hotSpot, setText);
 
-const handleClick = useCallback((event) => {
-  setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
-  console.log("Selected hotspot:", hotSpot);
+  // Use custom hook for resizable functionality
+  useResizableLabel(uuid, hotSpot);
 
-  if (event.ctrlKey) {
-    const currntDescriptionPositon = hotSpot.description.position;
-    let newDescriptionPositon;
+  const handleClick = useCallback((event) => {
+    setSelectedHotSpot(uuid); // Set the selectedHotSpot on click
+    console.log("Selected hotspot:", hotSpot);
 
-    switch (currntDescriptionPositon) {
-      case "bottom-right":
-        newDescriptionPositon = "bottom-left";
-        break;
-      case "bottom-left":
-        newDescriptionPositon = "top-left";
-        break;
-      case "top-left":
-        newDescriptionPositon = "top-right";
-        break;
-      case "top-right":
-        newDescriptionPositon = "bottom-right";
-        break;
-    }
-    hotSpot.updateDescriptionPosition(newDescriptionPositon);
-  } else {
-    // Find all elements with the class 'description' and set their visibility to hidden
-    const descriptionElements = document.querySelectorAll('.description');
+    if (event.ctrlKey) {
+      const currntDescriptionPositon = hotSpot.description.position;
+      let newDescriptionPositon;
 
+      switch (currntDescriptionPositon) {
+        case "bottom-right":
+          newDescriptionPositon = "bottom-left";
+          break;
+        case "bottom-left":
+          newDescriptionPositon = "top-left";
+          break;
+        case "top-left":
+          newDescriptionPositon = "top-right";
+          break;
+        case "top-right":
+          newDescriptionPositon = "bottom-right";
+          break;
+      }
+      hotSpot.updateDescriptionPosition(newDescriptionPositon);
+    } else {
+      // Find all elements with the class 'description' and set their visibility to hidden
+      const descriptionElements = document.querySelectorAll('.description');
 
-    // Find the element with the id 'description-{uuid}' and toggle its visibility
-    const targetDescriptionElement = document.getElementById(`description-${uuid}`);
-    
-    if (targetDescriptionElement) {
-      const currentVisibility = targetDescriptionElement.style.visibility;
-      // Toggle visibility: If hidden, make visible; if visible, make hidden
-      if (currentVisibility !== 'hidden') {
-        descriptionElements.forEach((el) => {
-          el.style.visibility = 'hidden';
-        });
+      // Find the element with the id 'description-{uuid}' and toggle its visibility
+      const targetDescriptionElement = document.getElementById(`description-${uuid}`);
       
-        
-      } else {
-        descriptionElements.forEach((el) => {
-          el.style.visibility = 'hidden';
-        });
-        targetDescriptionElement.style.visibility = 'visible';
+      if (targetDescriptionElement) {
+        const currentVisibility = targetDescriptionElement.style.visibility;
+        // Toggle visibility: If hidden, make visible; if visible, make hidden
+        if (currentVisibility !== 'hidden') {
+          descriptionElements.forEach((el) => {
+            el.style.visibility = 'hidden';
+          });
+        } else {
+          descriptionElements.forEach((el) => {
+            el.style.visibility = 'hidden';
+          });
+          targetDescriptionElement.style.visibility = 'visible';
+        }
       }
     }
-  }
-}, [setSelectedHotSpot, uuid, hotSpot]);
-
-  
+  }, [setSelectedHotSpot, uuid, hotSpot]);
 
   return (
     <div
       onClick={handleClick}
       id={`label-${uuid}`}
-      className="absolute top-0 p-2 opacity-90 text-white bg-orange-600 shadow-md select-none draggable label"
-      style={{ top: `${top}px`, left: `${left}px` }}
+      className="absolute top-0 p-2 opacity-90 text-white bg-orange-600 shadow-md select-none draggable resizable label"
+      style={{ top: `${top}px`, left: `${left}px`, width: `${hotSpot.label.w}px`, height: `${hotSpot.label.h}px` }}
     >
       <p>{text}</p>
     </div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .container {
+      width: 200px;
+      padding: 20px;
+      background-color: lightblue;
+      position: relative;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      left: -20px; /* Adjust position to point to the left */
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent lightblue transparent transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    Content goes here
+  </div>
+
+</body>
+</html>

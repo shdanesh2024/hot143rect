@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0">
+<symbol id="head" class="head" width="25" height="50">
+<!-- Path with a black stroke -->
+<path d="M 25 0 L 25 50 L 0 25 L 25 0 Z"/>
+<!-- Blue line from (25,0) to (25,50) -->
+<line x1="25" y1="0" x2="25" y2="50" />
+</symbol><symbol id="tail" class="tail" width="25" height="50">
+<!-- Path with a black stroke -->
+<path d="M 25 0 L 0 25 L 25 50 L 0 50 L 0 0 L 25 0 Z"/>
+<!-- Blue line from (0,0) to (0,50) -->
+<line x1="0" y1="0" x2="0" y2="50" />
+</symbol></svg>

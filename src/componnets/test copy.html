@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breadcrumb</title>
+  <style>
+    :root {
+      --breadcrumb-theme-1: #E91E63; /* color | background active */
+      --breadcrumb-theme-2: #FFFFFF; /* background | color active */
+      --breadcrumb-theme-3: #E91E63; /* hover */
+      --breadcrumb-theme-4: #E91E63; /* arrow */
+    }
+
+    .breadcrumb {
+      text-align: center;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      border-radius: 5px;
+      counter-reset: flag;
+      direction: rtl; /* Switch to right-to-left direction */
+    }
+
+    .breadcrumb__step {
+      text-decoration: none;
+      outline: none;
+      display: block;
+      float: right; /* Align elements to the right */
+      font-size: 14px;
+      line-height: 50px; /* Adjusted for 50px height */
+      padding: 0 70px 0 20px; /* Adjust padding for the new height */
+      height: 50px; /* Set height to 50px */
+      position: relative;
+      background: var(--breadcrumb-theme-2);
+      color: var(--breadcrumb-theme-1);
+      transition: background 0.5s;
+    }
+
+    .breadcrumb__step:first-child {
+      padding-right: 60px; /* Adjust padding for the first child */
+      border-radius: 0 5px 5px 0; /* Adjust border radius */
+    }
+
+    .breadcrumb__step:first-child::before {
+      right: 20px; /* Move circle to the right */
+    }
+
+    .breadcrumb__step:last-child {
+      border-radius: 5px 0 0 5px; /* Adjust border radius */
+      padding-left: 30px; /* Adjust padding */
+    }
+
+    .breadcrumb__step:last-child::after {
+      content: none;
+    }
+
+    /* Arrow */
+    .breadcrumb__step::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -18px; /* Flip arrow to the left */
+      width: 50px; /* Adjust width for larger height */
+      height: 50px; /* Adjust height for larger height */
+      transform: scale(0.707) rotate(135deg);
+      z-index: 1;
+      border-radius: 50px 0 5px 0; /* Adjust arrow shape */
+      background: var(--breadcrumb-theme-2);
+      transition: background 0.5s;
+      box-shadow: 2px 2px 2px 0px var(--breadcrumb-theme-4); /* Adjust shadow direction */
+    }
+
+    .breadcrumb__step--active {
+      color: var(--breadcrumb-theme-2);
+      background: var(--breadcrumb-theme-1);
+    }
+
+    .breadcrumb__step--active::before {
+      color: var(--breadcrumb-theme-1);
+    }
+
+    .breadcrumb__step--active::after {
+      background: var(--breadcrumb-theme-1);
+    }
+
+    .breadcrumb__step:hover {
+      color: var(--breadcrumb-theme-2);
+      background: var(--breadcrumb-theme-3);
+    }
+
+    .breadcrumb__step:hover::before {
+      color: var(--breadcrumb-theme-1);
+    }
+
+    .breadcrumb__step:hover::after {
+      color: var(--breadcrumb-theme-1);
+      background: var(--breadcrumb-theme-3);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="breadcrumb">
+    <a class="breadcrumb__step" href="#">ECMAScript</a>
+    <a class="breadcrumb__step breadcrumb__step--active" href="#">HTML5</a>
+    <a class="breadcrumb__step" href="#">Node.js</a>   
+  </div>
+
+</body>
+</html>

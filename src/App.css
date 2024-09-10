@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'IRANYekanX';
+    src: url('/fonts/iranYekanX/IRANYekanX-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'dana';
+    src: url('/fonts/dana/dana-regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'yekanBakh';
+    src: url('/fonts/yekanBakh/Yekan-Bakh-FaNum-04-Regular.woff2') format('woff2');
+  
+  }
+  @font-face {
+    font-family: 'koodak';
+    src: url('/fonts/koodak/bkoodkbd.woff2') format('woff2');
+  
+  }
+  body {
+    font-family: 'dana', sans-serif;
+ 
+  }
+  .label{
+    font-family: 'IRANYekanX', sans-serif;
+  }
+  .description{
+    font-family: 'koodak', sans-serif;
+    
+  }
+  

@@ -1,1 +1,50 @@
-<div style="background-color: blueviolet; margin: 0; padding: 0;">salam</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG Fill Example</title>
+  <style>
+    /* Change fill via CSS */
+    svg use {
+      fill: rgb(255, 255, 255); /* Set fill color to white */
+      stroke: black; /* Set the stroke color */
+      stroke-width: 2px;
+    }
+
+    /* Specific styling for the 'head' */
+    svg#head-svg use {
+      fill: rgb(255, 255, 255); /* Set fill color to white */
+    }
+
+    /* Apply filter for drop shadow */
+    svg {
+      filter: url(#drop-shadow); /* Reference the filter */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG filter definition for drop shadow -->
+  <!-- <svg width="0" height="0">
+    <defs>
+      <filter id="drop-shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="3" dy="3" stdDeviation="2" flood-color="rgba(0, 0, 0, 0.5)" />
+      </filter>
+    </defs>
+  </svg> -->
+
+ <div style="display: flex;">
+     <!-- Importing the 'head' symbol with specific ID for styling -->
+  <svg id="head-svg" width="50" height="100">
+    <use xlink:href="sprite.svg#head"></use>
+  </svg>
+<!-- <div style="width: 100px; height: 50px; border-top: 2px solid black; border-bottom: 2px solid black;">salam</div> -->
+  <!-- Importing the 'tail' symbol -->
+  <svg id="tail-svg" width="50" height="100">
+    <use xlink:href="sprite.svg#tail"></use>
+  </svg>
+
+ </div>
+</body>
+</html>

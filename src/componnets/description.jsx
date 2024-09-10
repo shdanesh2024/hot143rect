@@ -129,7 +129,10 @@ function Description({ hotSpot }) {
         backgroundColor: 'white',
         position: 'absolute',
         overflow: 'auto',
-        padding: isHtml ? '0' : '8px', 
+        padding: isHtml ? '0' : '35px', 
+        textAlign: 'justify',
+        direction: 'rtl',
+        lineHeight: '2.5',
       }}
       className="text-black shadow-md select-none description"
     >

@@ -9,10 +9,21 @@ import Description from "./description";
 function CanvasContainer({ imageSize }) {
   const hotSpots = useHotSpotStore((state) => state.hotSpots);
 
+  // Handle stage click to hide all description elements
+  const handleStageClick = () => {
+    const descriptionElements = document.querySelectorAll('.description');
+    descriptionElements.forEach((el) => {
+      el.style.visibility = 'hidden';
+    });
+  };
+
   return (
     <div className="absolute top-0 w-full h-full canvasContainer">
-     
-      <Stage width={imageSize.width} height={imageSize.height}>
+      <Stage
+        width={imageSize.width}
+        height={imageSize.height}
+        onClick={handleStageClick} // Attach click event handler
+      >
         <Layer>
           <Rect width={imageSize.width} height={imageSize.height} />
           {hotSpots.map((hotSpot) => (
@@ -27,28 +38,13 @@ function CanvasContainer({ imageSize }) {
         </Layer>
       </Stage>
       {hotSpots.map((hotSpot) => (
-        <Label
-          key={hotSpot.uuid}
-          top={100}
-          left={200}
-          hotSpot={hotSpot}
-        />
+        <Label key={hotSpot.uuid} top={100} left={200} hotSpot={hotSpot} />
       ))}
       {hotSpots.map((hotSpot) => (
-        <BlueMarker
-          key={hotSpot.uuid}
-          uuid={hotSpot.uuid}
-          top={100}
-          left={200}
-          text={hotSpot.label.text}
-        />
+        <BlueMarker key={hotSpot.uuid} uuid={hotSpot.uuid} top={100} left={200} text={hotSpot.label.text} />
       ))}
       {hotSpots.map((hotSpot) => (
-        <Description
-          key={hotSpot.uuid}
-   
-          hotSpot={hotSpot}
-        />
+        <Description key={hotSpot.uuid} hotSpot={hotSpot} />
       ))}
     </div>
   );
